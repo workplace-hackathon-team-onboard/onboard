@@ -6,12 +6,6 @@ type Message = {
   content: string;
 };
 
-interface Conversation {
-  id?: string;
-  name?: string;
-  messages: Message[];
-}
-
 // TODO take an answer object that has the user's name
 export async function compare(
   answer1: string,
@@ -38,7 +32,7 @@ export async function compare(
     stream: true,
   });
 
-  const comparison = response.data.choices[0];
+  const comparison = response.data.choices[0].message.content;
 
   return comparison;
 }
