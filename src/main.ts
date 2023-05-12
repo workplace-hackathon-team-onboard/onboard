@@ -4,5 +4,5 @@ import { startSlackBot } from "./slack-bot";
 
 console.log('42069')
 
-startSlackBot();
+// startSlackBot();
 startCronJobs();
