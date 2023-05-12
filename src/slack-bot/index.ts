@@ -15,6 +15,38 @@ app.message('cm', async ({say}) => {
   await say('sup CM')
 })
 
+// Listen to when "A new member has joined"
+app.event('team_join', async ({event, client}) => {
+ // TODO collect known user's slack ids & names -> store in db
+})
+
+
+
+// send qanda messages to known users
+export async function sendQA() {
+  // TODO only open if one doesn't exist - pending testing this
+  // Open a converstaion with the user
+  const response = await app.client.conversations.open({users: ''})
+
+  // TODO save channel id somewhere?
+  const channelId = response.channel.id;
+  console.log(channelId)
+
+  await app.client.chat.postMessage({
+    channel: channelId,
+    text: 'hello world',
+  })
+
+
+}
+
+// TODO will this be returned from the 'postMessage' above? or an event
+// store responses to qanda messages in db
+
+
+// send messages to sets of users based on matches generated from quand responses
+
+
 export async function startSlackBot (): Promise<void> {
   // Start the app
   await app.start(process.env.PORT || 3000);
