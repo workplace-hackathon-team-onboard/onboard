@@ -1,11 +1,12 @@
 import {generateReport} from "./service/reportService";
 import {CronJob} from "cron";
+import {Config} from "./config";
 
-const EVERY_MINUTE = '* * * * * *';
+
 
 export const startCronJobs = () => {
     new CronJob(
-    EVERY_MINUTE,
+    Config.GenerateReportCron,
     generateReport,
     null,
     true,
