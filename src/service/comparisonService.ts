@@ -12,6 +12,7 @@ interface Conversation {
   messages: Message[];
 }
 
+// TODO take an answer object that has the user's name
 export async function compare(
   answer1: string,
   answer2: string,
