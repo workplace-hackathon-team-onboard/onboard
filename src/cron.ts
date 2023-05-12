@@ -3,9 +3,8 @@ import {CronJob} from "cron";
 import {Config} from "./config";
 
 
-
 export const startCronJobs = () => {
-    new CronJob(
+  new CronJob(
     Config.GenerateReportCron,
     generateReport,
     null,
