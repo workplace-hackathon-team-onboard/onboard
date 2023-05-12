@@ -23,8 +23,8 @@
     "typescript": "~5.0"
   },
   "scripts": {
-    "init": "prisma migrate dev",
-    "start": "ts-node src/main.ts",
+    "migrate": "prisma migrate dev",
+    "start": "npm run migrate && ts-node src/main.ts",
     "clean": "rimraf coverage build tmp",
     "prebuild": "npm run lint",
     "build": "tsc -p tsconfig.json",
