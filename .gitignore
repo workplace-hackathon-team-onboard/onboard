@@ -3,6 +3,9 @@ logs
 *.log
 npm-debug.log*
 
+prisma/dev.db
+prisma/dev.db-journal
+
 # Dependencies
 node_modules/
 

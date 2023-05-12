@@ -23,6 +23,7 @@
     "typescript": "~5.0"
   },
   "scripts": {
+    "init": "prisma migrate dev",
     "start": "ts-node src/main.ts",
     "clean": "rimraf coverage build tmp",
     "prebuild": "npm run lint",
@@ -37,6 +38,7 @@
   "author": "Jakub Synowiec <jsynowiec@users.noreply.github.com>",
   "license": "Apache-2.0",
   "dependencies": {
+    "@prisma/client": "^4.14.0",
     "tslib": "~2.5"
   },
   "volta": {
