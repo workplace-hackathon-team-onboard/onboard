@@ -89,12 +89,14 @@ export const generateComparison = async () => {
         answer.answer,
       );
 
-      console.log({ YEET: comparison });
+      console.log({ COMPARISON: comparison });
 
       await prisma.comparison.create({
         data: {
           userId: answer.userId,
           report: comparison,
+          newStarterName: newAnswer.User.name,
+          teamMemberName: answer.User.name,
           questionId: answer.questionId,
           createdAt: new Date(),
         },

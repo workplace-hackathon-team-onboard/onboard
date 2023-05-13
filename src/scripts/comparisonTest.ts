@@ -7,6 +7,12 @@ const testAnswer2 =
   'My journey into the software industry began in a rather unconventional way. Although I initially pursued a degree in electrical engineering, I realized my true passion lay in software development during my sophomore year. Intrigued by coding and its potential to create impactful solutions, I began taking online courses and exploring various programming languages. I immersed myself in self-study, building small projects and collaborating with like-minded individuals. This hands-on experience helped me develop a solid skill set and a deep understanding of software engineering principles. After completing my degree, I transitioned into a software engineering role at a startup. The fast-paced environment allowed me to work on diverse projects and exposed me to the full software development life cycle. I learned the importance of agile methodologies, effective collaboration, and delivering high-quality software products. Over time, I honed my skills, took on leadership responsibilities, and progressed to the position of Senior Software Engineer. My journey demonstrates that dedication, continuous learning, and a genuine passion for software development can pave the way to a successful career in this industry.';
 
 (async () => {
-  const comparison = await compare(testQuestion, testAnswer1, testAnswer2);
+  const comparison = await compare(
+    testQuestion,
+    'bob',
+    testAnswer1,
+    'billy',
+    testAnswer2,
+  );
   console.log(comparison);
 })();
