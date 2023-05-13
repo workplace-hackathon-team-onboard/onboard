@@ -13,17 +13,21 @@ export async function compare(
   answer2: string,
 ): Promise<string> {
   const prompt = `
-    I have the following ice-breaker question:
+    I have the following ice-breaker question to help new starters in a remote company get to know their team mates better:
 
+    \`\`\`
     "${question}"
+    \`\`\`
 
-    Please compare these two answers and draw any interesting or insightful links OR interesting differences. Please constrain this comparison to no more than 140 characters.
+    Please compare these two answers and draw any interesting or insightful links OR interesting differences. Please constrain this comparison to no more than 140 characters and mention their names.
 
-    """
+    \`\`\`
     ${answer1}
 
     ${answer2}
-    """
+    \`\`\`
+
+    Please compare these two answers and draw any interesting or insightful links OR interesting differences. Please constrain this comparison to no more than 140 characters and mention their names.
   `;
 
   const message: Message = {
@@ -36,11 +40,9 @@ export async function compare(
   const response = await openai.createChatCompletion({
     model: 'gpt-3.5-turbo',
     messages: [message],
-    stream: true,
   });
 
   const comparison = response.data.choices[0].message.content;
 
   return comparison;
 }
-
