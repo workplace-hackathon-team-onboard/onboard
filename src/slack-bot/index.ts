@@ -1,17 +1,17 @@
-import { App } from "@slack/bolt";
-import { prisma } from "../helpers/prismaClient";
-import { blocks } from "./blockBuilders";
+import { App } from '@slack/bolt';
+import { prisma } from '../helpers/prismaClient';
+import { generateComparison } from '../service/comparisonService';
+import { blocks } from './blockBuilders';
 
 interface Question {
-  questionId: number
-  question: string
+  questionId: number;
+  question: string;
 }
 
 interface QAArgs {
-  slackUserId: string
-  questions: Question[]
+  slackUserId: string;
+  questions: Question[];
 }
-
 
 const app = new App({
   token: process.env.SLACK_TOKEN,
@@ -27,9 +27,9 @@ const app = new App({
   // installationStore: new FileInstallationStore({baseDir: './file', historicalDataEnabled: false, clientId: '5225133679798.5255377016402' }),
 });
 
-app.event('member_joined_channel', async ({event, client}) => {
+app.event('member_joined_channel', async ({ event, client }) => {
   console.log('member joined channel', event);
-  const userInfo = await client.users.info({user: event.user})
+  const userInfo = await client.users.info({ user: event.user });
   if (userInfo.user) {
     const email = userInfo.user.profile.email;
     const name = userInfo.user.profile.real_name;
@@ -45,96 +45,100 @@ app.event('member_joined_channel', async ({event, client}) => {
       },
       update: {},
       where: {
-        email: email
-      }
-    })
-    console.log('new user onboarded', user)
+        email: email,
+      },
+    });
+    console.log('new user onboarded', user);
   } else {
-    console.error('no user info found for user: ', event)
+    console.error('no user info found for user: ', event);
   }
-})
+});
 
-app.action('submit_question', async ({ack, say, body, client}) => {
+app.action('submit_question', async ({ ack, say, body, client }) => {
   // eslint-disable-next-line
   // @ts-ignore
-  const questionIds = Object.keys(body.state.values.question_block)
-  const userInfo = await client.users.info({user: body.user.id})
+  const questionIds = Object.keys(body.state.values.question_block);
+  const userInfo = await client.users.info({ user: body.user.id });
   const email = userInfo.user.profile.email;
   const prismaUser = await prisma.user.findFirst({
     where: {
-      email: email
-    }
-  })
+      email: email,
+    },
+  });
 
-  console.log(JSON.stringify(body, null, 2))
-  console.log(prismaUser)
+  console.log(JSON.stringify(body, null, 2));
+  console.log(prismaUser);
 
-
-  for(const questionId of questionIds) {
+  for (const questionId of questionIds) {
     // eslint-disable-next-line
     // @ts-ignore
-    const answer = body.state.values.question_block[questionId].value
+    const answer = body.state.values.question_block[questionId].value;
 
-    await prisma.answer.create({
+    const prismaAnswer = await prisma.answer.create({
       data: {
         answer: answer,
         questionId: Number(questionId),
         createdAt: new Date(),
         userId: prismaUser.id,
-      }
-    })
+      },
+    });
 
-    console.log('the answer is', answer)
+    await generateComparison(prismaAnswer);
+
+    console.log('the answer is', answer);
   }
 
-  await ack()
-})
+  await ack();
+});
 
 export async function getSlackUserByEmail(email: string) {
-  const response = await app.client.users.lookupByEmail({ email })
-  return response.user
+  const response = await app.client.users.lookupByEmail({ email });
+  return response.user;
 }
-
 
 export async function sendQA(qaArgs: QAArgs) {
   // Open a conversation with the user - this is idempotent
-  const response = await app.client.conversations.open({users: qaArgs.slackUserId})
+  const response = await app.client.conversations.open({
+    users: qaArgs.slackUserId,
+  });
 
   const channelId = response.channel.id;
   console.log('asking questions in channel', channelId, qaArgs);
   await app.client.chat.postMessage({
     channel: channelId,
     blocks: [
-      ...qaArgs.questions.map(
-        (question) => blocks.question(question.question, 1)
+      ...qaArgs.questions.map((question) =>
+        blocks.question(question.question, 1),
       ),
-      blocks.submitQuestionButton()
-    ]
-  })
+      blocks.submitQuestionButton(),
+    ],
+  });
 }
 
-export async function sendComparisonResponse(slackUserId: string, comparisonResults: string) {
-  const response = await app.client.conversations.open({users: slackUserId})
+export async function sendComparisonResponse(
+  slackUserId: string,
+  comparisonResults: string,
+) {
+  const response = await app.client.conversations.open({ users: slackUserId });
   const channelId = response.channel.id;
   await app.client.chat.postMessage({
     channel: channelId,
-    text: 'Welcome to the team bro'
-  })
+    text: 'Welcome to the team bro',
+  });
 }
 
-export async function startSlackBot (): Promise<void> {
+export async function startSlackBot(): Promise<void> {
   // Start the app
   await app.start(process.env.PORT || 3000);
 
   console.log('⚡️ Bolt app is running!');
-// app.client.oauth.v2.access({})
+  // app.client.oauth.v2.access({})
   // sendComparisonResponse('U057GHZBWFM', 'stuff')
   // sendQA({slackUserId: 'U057GHZBWFM', questions: [{questionId: 1, question: 'What is your name?'}]})
 
   // const res = await app.client.users.list()
   // console.log(res.members.map((user) => ( { id: user.id, name: user.name, email: user.} )))
 }
-
 
 /*
 [
