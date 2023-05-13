@@ -14,7 +14,7 @@ export async function compare(
 ): Promise<string> {
   const prompt = `
     I have the following ice-breaker question:
-    
+
     "${question}"
 
     Please compare these two answers and draw any interesting or insightful links OR interesting differences. Please constrain this comparison to no more than 140 characters.
@@ -43,3 +43,4 @@ export async function compare(
 
   return comparison;
 }
+
