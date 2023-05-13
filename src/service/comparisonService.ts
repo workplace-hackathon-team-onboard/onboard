@@ -71,6 +71,7 @@ export const generateComparison = async (newAnswer: Answer, prismaUser: User) =>
 
   const teamAnswers = question.Answer;
 
+  const comparisons = [];
   for (let answer of teamAnswers) {
     if (answer.userId !== newAnswer.userId) {
       const comparison = await compare(
@@ -80,6 +81,7 @@ export const generateComparison = async (newAnswer: Answer, prismaUser: User) =>
         answer.User.name,
         answer.answer,
       );
+      comparisons.push(comparison);
 
       await prisma.comparison.create({
         data: {
@@ -93,4 +95,5 @@ export const generateComparison = async (newAnswer: Answer, prismaUser: User) =>
       });
     }
   }
+  return comparisons;
 };

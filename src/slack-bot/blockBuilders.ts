@@ -29,7 +29,18 @@ const submitQuestionButton = () => ({
   ]
 })
 
+const comparisonInsights = (comparisons: string[]) =>
+    comparisons.map((comparison) => ({
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": comparison
+      }
+    }))
+
+
 export const blocks = {
   question,
-  submitQuestionButton
+  submitQuestionButton,
+  comparisonInsights
 }
