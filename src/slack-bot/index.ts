@@ -43,7 +43,12 @@ app.event('member_joined_channel', async ({ event, client }) => {
         updatedAt: new Date(),
         onboarded: false,
       },
-      update: {},
+      update: {
+        slackId,
+        onboarded: false,
+        email,
+        name
+      },
       where: {
         email: email,
       },
