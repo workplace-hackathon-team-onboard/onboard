@@ -69,7 +69,6 @@ app.action('submit_question', async ({ack, say, body, client}) => {
     // @ts-ignore
     const answer = body.state.values.question_block[questionId].value
 
-    // prisma.user.findFirst({})
     await prisma.answer.create({
       data: {
         answer: answer,
@@ -84,6 +83,11 @@ app.action('submit_question', async ({ack, say, body, client}) => {
 
   await ack()
 })
+
+export async function getSlackUserByEmail(email: string) {
+  const response = await app.client.users.lookupByEmail({ email })
+  return response.user
+}
 
 
 export async function sendQA(qaArgs: QAArgs) {
