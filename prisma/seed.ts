@@ -83,13 +83,6 @@ const insertAnswers = async () => {
       createdAt: new Date(),
     },
     {
-      id: 2,
-      questionId: 1,
-      answer: `I'm a big fan of sushi. The freshness of the fish, the delicate flavors, and the beautiful presentation make it a culinary delight for me. Whether it's sashimi, nigiri, or maki rolls, I always enjoy the experience.`,
-      userId: 2,
-      createdAt: new Date(),
-    },
-    {
       id: 3,
       questionId: 1,
       answer: `I have a sweet tooth, so my favorite food is chocolate. Whether it's a rich dark chocolate bar, a decadent chocolate cake, or even a simple chocolate chip cookie, I can't resist the indulgent taste and smooth texture.`,
