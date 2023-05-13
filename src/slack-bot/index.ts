@@ -88,7 +88,7 @@ app.action('submit_question', async ({ ack, say, body, client }) => {
       },
     });
 
-    await generateComparison(prismaAnswer);
+    await generateComparison(prismaAnswer, prismaUser);
 
     console.log('the answer is', answer);
   }
