@@ -1,5 +1,6 @@
 import { App } from "@slack/bolt";
 import { blocks } from "./blockBuilders";
+import {prisma} from "../helpers/prismaClient";
 
 
 interface Question {
@@ -22,9 +23,27 @@ const app = new App({
 });
 
 app.event('member_joined_channel', async ({event, client}) => {
-  // TODO reece save to db - this person is a new starter
-  const userId = event.user
-  console.log('new user joined: ', userId)
+  const userInfo = await client.users.info({user: event.user})
+  if (userInfo.user) {
+    const email = userInfo.user.profile.email;
+    const name = userInfo.user.profile.real_name;
+    const user = await prisma.user.upsert({
+      create: {
+        email: email,
+        name: name,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        onboarded: false,
+      },
+      update: {},
+      where: {
+        email: email
+      }
+    })
+    console.log('new user onboarded', event, user)
+  } else {
+    console.error('no user info found for user: ', event)
+  }
 })
 
 app.action('submit_question', async ({ack, say, body}) => {
