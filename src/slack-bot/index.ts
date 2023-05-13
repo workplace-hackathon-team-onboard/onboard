@@ -71,6 +71,13 @@ app.action('submit_question', async ({ ack, say, body, client }) => {
     },
   });
 
+  if (!prismaUser) {
+    console.error(
+      'Could not find user by email', email
+    )
+    return;
+  }
+
   console.log(JSON.stringify(body, null, 2));
   console.log(prismaUser);
 
