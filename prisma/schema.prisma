@@ -33,7 +33,6 @@ model Answer {
   id         Int      @id @default(autoincrement())
   question   Question @relation(fields: [questionId], references: [id])
   answer     String
-  user       String
   questionId Int
   createdAt  DateTime
   User       User?    @relation(fields: [userId], references: [id])
