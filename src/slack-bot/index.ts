@@ -2,6 +2,7 @@ import { App } from '@slack/bolt';
 import { prisma } from '../helpers/prismaClient';
 import { generateComparison } from '../service/comparisonService';
 import { blocks } from './blockBuilders';
+import {getNextUnansweredQuestion} from "../service/questionService";
 
 interface Question {
   questionId: number;
@@ -54,6 +55,19 @@ app.event('member_joined_channel', async ({ event, client }) => {
       },
     });
     console.log('new user onboarded', user);
+
+    const question = await getNextUnansweredQuestion(user.id);
+
+    if (question) {
+      await sendQA({
+        slackUserId: user.slackId,
+        questions: [{
+          questionId: question.id,
+          question: question.question
+        }]
+      })
+    }
+
   } else {
     console.error('no user info found for user: ', event);
   }
@@ -106,6 +120,19 @@ app.action('submit_question', async ({ ack, say, body, client }) => {
     await generateComparison(prismaAnswer, prismaUser);
 
     console.log('the answer is', answer);
+
+    const question = await getNextUnansweredQuestion(prismaUser.id);
+
+    if (question) {
+      await sendQA({
+        slackUserId: prismaUser.slackId,
+        questions: [{
+          questionId: question.id,
+          question: question.question
+        }]
+      })
+    }
+
   }
 
   await ack();
