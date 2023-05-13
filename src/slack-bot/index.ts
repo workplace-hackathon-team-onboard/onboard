@@ -35,25 +35,30 @@ app.event('member_joined_channel', async ({ event, client }) => {
     const email = userInfo.user.profile.email;
     const name = userInfo.user.profile.real_name;
     const slackId = userInfo.user.id;
-    const user = await prisma.user.upsert({
-      create: {
-        email,
-        name,
-        slackId,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        onboarded: false,
-      },
-      update: {
-        slackId,
-        onboarded: false,
-        email,
-        name
-      },
-      where: {
-        email: email,
-      },
-    });
+    if (await prisma.user.count({where: { email: email } }) !== 1) {
+      await prisma.user.upsert({
+        create: {
+          email,
+          name,
+          slackId,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          onboarded: false,
+        },
+        update: {
+          slackId,
+          onboarded: false,
+          email,
+          name
+        },
+        where: {
+          email: email,
+        },
+      });
+      }
+
+    const user = (await prisma.user.findFirst({where: {email}}))!;
+
     console.log('new user onboarded', user);
 
     const question = await getNextUnansweredQuestion(user.id);

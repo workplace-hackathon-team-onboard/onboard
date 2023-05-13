@@ -20,6 +20,8 @@ export const getNextUnansweredQuestion = async (userId: UserId): Promise<Questio
     }
   })
 
+  console.log('unanswered', unansweredQuestions)
+
   if (unansweredQuestions && unansweredQuestions.length > 0) {
     return unansweredQuestions[0]
   }
