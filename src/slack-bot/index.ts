@@ -1,11 +1,12 @@
 import { App } from "@slack/bolt";
+import { blocks } from "./blockBuilders";
 
 const app = new App({
-  token:'xoxb-5225133679798-5252434835301-6pLzWzFvcgzMpyouuzdnH73w',
+  token:'xoxb-5225133679798-5252434835301-rCv6WSOexHG3oq8byIn6wxJY',
   clientId: '5225133679798.5255377016402',
   clientSecret: '6d002315132274f9cb3875e55f8b6018',
   signingSecret: '8d965db0ab92534c5168712b6f081427',
-  appToken: 'xapp-1-A057HB30GBU-5282612485776-197eb46a4bc58950329e77e46d46c78f01faf1c06c315dc9d39e92d807e55f1a',
+  appToken: 'xapp-1-A057HB30GBU-5282695082864-c44689831bcc4217f0c9421dfeef70af6a5c6d339e1f6725ed9421f0ee29f2fc',
   socketMode: true,
 });
 
@@ -16,7 +17,13 @@ app.message('cm', async ({say}) => {
 })
 
 app.action('submit_question', async ({ack, say, body}) => {
+  // eslint-disable-next-line
+  // @ts-ignore
+  const answer = body.state.values.question_block['plain_text_input-action'].value;
+
+  console.log(' The answer is: ', answer)
   await say('sup bro')
+  await ack()
 })
 
 // Listen to when "A new member has joined"
@@ -40,45 +47,15 @@ interface QAArgs {
 
 // send qanda messages to known users
 export async function sendQA() {
-  // TODO only open if one doesn't exist - pending testing this
-  // Open a converstaion with the user
+  // Open a converstaion with the user - this is idempotent
   const response = await app.client.conversations.open({users: 'U057GHZBWFM'})
 
-  // TODO save channel id somewhere?
   const channelId = response.channel.id;
-  console.log('ChannelId is : ', channelId)
-
   await app.client.chat.postMessage({
     channel: channelId,
     blocks: [
-      {
-        "type": "input",
-        "element": {
-          "type": "plain_text_input",
-          "multiline": true,
-          "action_id": "plain_text_input-action"
-        },
-        "label": {
-          "type": "plain_text",
-          "text": "Q1",
-          "emoji": true
-        }
-      },
-      {
-        "type": "actions",
-        "elements": [
-          {
-            "type": "button",
-            "text": {
-              "type": "plain_text",
-              "text": "Submit",
-              "emoji": true
-            },
-            "value": "click_me_123",
-            "action_id": "submit_question"
-          }
-        ]
-      }
+      blocks.question('What is your name?'),
+      blocks.submitQuestionButton()
     ]
   })
 
