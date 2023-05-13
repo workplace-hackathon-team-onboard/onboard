@@ -33,10 +33,12 @@ app.event('member_joined_channel', async ({event, client}) => {
   if (userInfo.user) {
     const email = userInfo.user.profile.email;
     const name = userInfo.user.profile.real_name;
+    const slackId = userInfo.user.id;
     const user = await prisma.user.upsert({
       create: {
-        email: email,
-        name: name,
+        email,
+        name,
+        slackId,
         createdAt: new Date(),
         updatedAt: new Date(),
         onboarded: false,
