@@ -1,6 +1,6 @@
 
 export enum Crons {
-   EVERY_MINUTE = '* * * * *',
+   EVERY_MINUTE = '* * * * * *',
 }
 
 export const Config = {
