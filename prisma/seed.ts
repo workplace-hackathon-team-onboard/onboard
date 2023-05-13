@@ -30,7 +30,7 @@ const insertUsers = async () => {
   const users = [
     {
       name: 'Connor',
-      email: 'connor_monaghan@hotmail.com',
+      email: 'connormonaghan1914@gmail.com',
       createdAt: new Date(),
       updatedAt: new Date(),
       onboarded: true,
