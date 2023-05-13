@@ -62,7 +62,7 @@ const insertUsers = async () => {
   for (let user of users) {
     const res = await prisma.user.upsert({
       create: user,
-      update: {},
+      update: user,
       where: {
         email: user.email
       },
