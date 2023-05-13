@@ -10,7 +10,9 @@ type Message = {
 // TODO take an answer object that has the user's name
 export async function compare(
   question: string,
+  name1: string,
   answer1: string,
+  name2: string,
   answer2: string,
 ): Promise<string> {
   const prompt = `
@@ -23,9 +25,9 @@ export async function compare(
     Please compare these two answers and draw any interesting or insightful links OR interesting differences. Please constrain this comparison to no more than 140 characters and mention their names.
 
     \`\`\`
-    ${answer1}
+    ${name1}:${answer1}
 
-    ${answer2}
+    ${name2}:${answer2}
     \`\`\`
 
     Please compare these two answers and draw any interesting or insightful links OR interesting differences. Please constrain this comparison to no more than 140 characters and mention their names.
@@ -65,7 +67,13 @@ export const generateComparison = async () => {
   });
 
   const question = await prisma.question.findFirst({
-    include: { Answer: true },
+    include: {
+      Answer: {
+        include: {
+          User: true,
+        },
+      },
+    },
     where: { id: newAnswer.questionId },
   });
 
@@ -75,7 +83,9 @@ export const generateComparison = async () => {
     if (answer.userId !== newAnswer.userId) {
       const comparison = await compare(
         question.question,
+        newAnswer.User.name,
         newAnswer.answer,
+        answer.User.name,
         answer.answer,
       );
 
