@@ -12,13 +12,14 @@ interface QAArgs {
   questions: Question[]
 }
 
+
 const app = new App({
-  token:'xoxb-5225133679798-5252434835301-wkyZCVRAfouEmXvLUwzKEXlH',
+  token:'xoxb-5225133679798-5252434835301-eM5NLh8xSxDV9Xpc0FJ6pt38',
   clientId: '5225133679798.5255377016402',
   clientSecret: '6d002315132274f9cb3875e55f8b6018',
   signingSecret: '8d965db0ab92534c5168712b6f081427',
-  botId: 'B057ANMKK54',
-  appToken: 'xapp-1-A057HB30GBU-5256188192293-81778a4b0234b51106cdc6c90a66c68c3b06dfa6729744521caf58b1d7230a55',
+  // botId: 'B057ANMKK54',
+  appToken: 'xapp-1-A057HB30GBU-5259150395763-579bfc747a9953ad04aecf336b5fc647d5bdbc9cce85f09a68a094eb4592ea24',
   socketMode: true,
   // stateSecret: 'my-secret',
   // scopes: ['calls:write', 'channels:history', 'channels:read', 'chat:write', 'im:write', 'users:read', 'users:read.email'],
@@ -125,7 +126,7 @@ export async function startSlackBot (): Promise<void> {
   console.log('⚡️ Bolt app is running!');
 // app.client.oauth.v2.access({})
   // sendComparisonResponse('U057GHZBWFM', 'stuff')
-  sendQA({slackUserId: 'U057GHZBWFM', questions: [{questionId: 1, question: 'What is your name?'}]})
+  // sendQA({slackUserId: 'U057GHZBWFM', questions: [{questionId: 1, question: 'What is your name?'}]})
 
   // const res = await app.client.users.list()
   // console.log(res.members.map((user) => ( { id: user.id, name: user.name, email: user.} )))
