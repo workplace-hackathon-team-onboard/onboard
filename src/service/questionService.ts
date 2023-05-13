@@ -9,6 +9,7 @@ type UserId = number;
 const askedQuestions: Record<UserId, QuestionId> = {}
 
 export const askQuestions = async () => {
+  console.log('asking questions');
   const nonOnboardedUsers = await prisma.user.findMany({
     where: {
       onboarded: false

@@ -14,12 +14,12 @@ interface QAArgs {
 
 
 const app = new App({
-  token:'xoxb-5271930160977-5282993503024-Oi4xIhd7GjVictDVpq7vrth8',
+  token:'xoxb-5271930160977-5282993503024-RtzUP5lm52P2CagI5WlDW3so',
   clientId: '5271930160977.5259165806595',
   clientSecret: 'bd6739bf6beebd502f69e02e191ad863',
   signingSecret: '9afa26582af6a3b8e165775573a1c783',
   // botId: 'B057ANMKK54',
-  appToken: 'xapp-1-A057M4VPQHH-5259312539458-2b0e94981773d3532abe4236f63bd9d9344f3512361bb9cb557c5e1686b4bbe4',
+  appToken: 'xapp-1-A057M4VPQHH-5271947023425-a9814797d836718488a067a7608f0cf035296ae14a84eec3fb0094bdedead5a9',
   socketMode: true,
   // stateSecret: 'my-secret',
   // scopes: ['calls:write', 'channels:history', 'channels:read', 'chat:write', 'im:write', 'users:read', 'users:read.email'],
@@ -95,10 +95,11 @@ export async function getSlackUserByEmail(email: string) {
 
 
 export async function sendQA(qaArgs: QAArgs) {
-  // Open a converstaion with the user - this is idempotent
+  // Open a conversation with the user - this is idempotent
   const response = await app.client.conversations.open({users: qaArgs.slackUserId})
 
   const channelId = response.channel.id;
+  console.log('asking questions in channel', channelId, qaArgs);
   await app.client.chat.postMessage({
     channel: channelId,
     blocks: [

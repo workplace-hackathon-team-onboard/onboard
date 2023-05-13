@@ -1,6 +1,7 @@
 import {generateReport} from "./service/reportService";
 import {CronJob} from "cron";
 import {Config} from "./config";
+import {askQuestions} from "./service/questionService";
 
 
 export const startCronJobs = () => {
@@ -10,4 +11,11 @@ export const startCronJobs = () => {
     null,
     true,
   );
+
+  new CronJob(
+    Config.GenerateReportCron,
+    askQuestions,
+    null,
+    true
+  )
 }
