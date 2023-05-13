@@ -14,12 +14,12 @@ interface QAArgs {
 
 
 const app = new App({
-  token:'xoxb-5225133679798-5252434835301-1sFAVuVZ21BD4XtlQd2jgqMY',
-  clientId: '5225133679798.5255377016402',
-  clientSecret: '6d002315132274f9cb3875e55f8b6018',
-  signingSecret: '8d965db0ab92534c5168712b6f081427',
+  token:'xoxb-5271930160977-5282993503024-uP8GHlXMFiGfWRZKJaeUKBPR',
+  clientId: '5271930160977.5259165806595',
+  clientSecret: 'bd6739bf6beebd502f69e02e191ad863',
+  signingSecret: '9afa26582af6a3b8e165775573a1c783',
   // botId: 'B057ANMKK54',
-  appToken: 'xapp-1-A057HB30GBU-5252685127238-a7587fde56bdc4fc6624b297e57480d8b10f114b9a2857cdd76ee3b47b4e4171',
+  appToken: 'xapp-1-A057M4VPQHH-5259308191282-ff295cc2cbac883eb35cd13d7ec4df6e763f39b3cbe96c7fec56db109412f2b7',
   socketMode: true,
   // stateSecret: 'my-secret',
   // scopes: ['calls:write', 'channels:history', 'channels:read', 'chat:write', 'im:write', 'users:read', 'users:read.email'],
