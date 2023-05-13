@@ -1,4 +1,5 @@
 import OpenAIManager from '../helpers/gptClient';
+import { prisma } from '../helpers/prismaClient';
 
 type Message = {
   id?: string;
@@ -53,3 +54,41 @@ export async function compare(
  *   Generate a comparison via chatGPT between a new team member and everyone in the team.
  *   Persist the comparison in the db.
  */
+export const generateComparison = async () => {
+  const newAnswer = await prisma.answer.findFirst({
+    include: { User: true, question: true },
+    where: {
+      User: {
+        onboarded: false,
+      },
+    },
+  });
+
+  const question = await prisma.question.findFirst({
+    include: { Answer: true },
+    where: { id: newAnswer.questionId },
+  });
+
+  const teamAnswers = question.Answer;
+
+  for (let answer of teamAnswers) {
+    if (answer.userId !== newAnswer.userId) {
+      const comparison = await compare(
+        question.question,
+        newAnswer.answer,
+        answer.answer,
+      );
+
+      await prisma.comparison.upsert({
+        where: {},
+        create: {
+          userId: answer.userId,
+          report: comparison,
+          questionId: answer.questionId,
+          createdAt: new Date(),
+        },
+        update: undefined,
+      });
+    }
+  }
+};

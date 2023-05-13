@@ -35,7 +35,8 @@
     "test": "jest --coverage",
     "prettier": "prettier --config .prettierrc --write .",
     "test:watch": "jest --watch",
-    "local:compare": "ts-node -r dotenv/config src/scripts/comparisonTest.ts"
+    "local:compare": "ts-node -r dotenv/config src/scripts/comparisonTest.ts",
+    "local:comparisonService": "ts-node -r dotenv/config src/scripts/comparisonServiceTest.ts"
   },
   "author": "Jakub Synowiec <jsynowiec@users.noreply.github.com>",
   "license": "Apache-2.0",
