@@ -3,7 +3,7 @@ import { blocks } from "./blockBuilders";
 import {prisma} from "../helpers/prismaClient";
 
 interface Question {
-  questionId: string
+  questionId: number
   question: string
 }
 
@@ -12,12 +12,14 @@ interface QAArgs {
   questions: Question[]
 }
 
+
+
 const app = new App({
-  token:'xoxb-5225133679798-5252434835301-zwRuaLmx8YS14ahJdQDQAs3D',
+  token:'xoxb-5225133679798-5252434835301-wkyZCVRAfouEmXvLUwzKEXlH',
   clientId: '5225133679798.5255377016402',
   clientSecret: '6d002315132274f9cb3875e55f8b6018',
   signingSecret: '8d965db0ab92534c5168712b6f081427',
-  appToken: 'xapp-1-A057HB30GBU-5259069846578-3848bc0b96b56e733d05fdaeabb235f36665d2aa2d101e4810c09e8b45a7ebee',
+  appToken: 'xapp-1-A057HB30GBU-5256188192293-81778a4b0234b51106cdc6c90a66c68c3b06dfa6729744521caf58b1d7230a55',
   socketMode: true,
 });
 
@@ -46,13 +48,40 @@ app.event('member_joined_channel', async ({event, client}) => {
   }
 })
 
-app.action('submit_question', async ({ack, say, body}) => {
+app.action('submit_question', async ({ack, say, body, client}) => {
   // eslint-disable-next-line
   // @ts-ignore
-  const answer = body.state.values.question_block['plain_text_input-action'].value;
+  const questionIds = Object.keys(body.state.values.question_block)
+  const userInfo = await client.users.info({user: body.user.id})
+  const email = userInfo.user.profile.email;
+  const prismaUser = await prisma.user.findFirst({
+    where: {
+      email: email
+    }
+  })
 
-  console.log(' The answer is: ', answer)
-  await say('sup bro')
+  console.log(JSON.stringify(body, null, 2))
+  console.log(prismaUser)
+
+
+  for(const questionId of questionIds) {
+    // eslint-disable-next-line
+    // @ts-ignore
+    const answer = body.state.values.question_block[questionId].value
+
+    // prisma.user.findFirst({})
+    await prisma.answer.create({
+      data: {
+        answer: answer,
+        questionId: Number(questionId),
+        createdAt: new Date(),
+        userId: prismaUser.id,
+      }
+    })
+
+    console.log('the answer is', answer)
+  }
+
   await ack()
 })
 
@@ -66,7 +95,7 @@ export async function sendQA(qaArgs: QAArgs) {
     channel: channelId,
     blocks: [
       ...qaArgs.questions.map(
-        (question) => blocks.question(question.question)
+        (question) => blocks.question(question.question, 1)
       ),
       blocks.submitQuestionButton()
     ]
@@ -88,10 +117,11 @@ export async function startSlackBot (): Promise<void> {
 
   console.log('⚡️ Bolt app is running!');
 
-  sendComparisonResponse('U057GHZBWFM', 'stuff')
+  // sendComparisonResponse('U057GHZBWFM', 'stuff')
+  sendQA({slackUserId: 'U057GHZBWFM', questions: [{questionId: 1, question: 'What is your name?'}]})
 
   // const res = await app.client.users.list()
-  // console.log(res.members.map((user) => ( { id: user.id, name: user.name } )))
+  // console.log(res.members.map((user) => ( { id: user.id, name: user.name, email: user.} )))
 }
 
 

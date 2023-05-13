@@ -30,28 +30,28 @@ const insertUsers = async () => {
   const users = [
     {
       name: 'Connor',
-      email: 'john@gmail.com',
+      email: 'connormonaghan1914@gmail.com',
       createdAt: new Date(),
       updatedAt: new Date(),
       onboarded: true,
     },
     {
       name: 'Brian',
-      email: 'brian@gmail.com',
+      email: 'b.riwukaho@gmail.com',
       createdAt: new Date(),
       updatedAt: new Date(),
       onboarded: false,
     },
     {
       name: 'Noah',
-      email: 'noah@gmail.com',
+      email: 'noah.davey@gmail.com',
       createdAt: new Date(),
       updatedAt: new Date(),
       onboarded: true,
     },
     {
       name: 'Reece',
-      email: 'reece@gmail.com',
+      email: 'fenwickreece08@gmail.com',
       createdAt: new Date(),
       updatedAt: new Date(),
       onboarded: true,
