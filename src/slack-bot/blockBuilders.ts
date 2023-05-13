@@ -1,10 +1,10 @@
-const question = (question: string) => ({
+const question = (question: string, questionId: string) => ({
   "type": "input",
   "block_id": "question_block",
   "element": {
     "type": "plain_text_input",
     "multiline": true,
-    "action_id": "plain_text_input-action"
+    "action_id": questionId
   },
   "label": {
     "type": "plain_text",
