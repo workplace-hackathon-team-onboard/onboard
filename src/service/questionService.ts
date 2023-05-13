@@ -10,22 +10,19 @@ type UserId = number;
 const askedQuestions: Record<UserId, QuestionId> = {}
 
 export const getNextUnansweredQuestion = async (userId: UserId): Promise<Question  | undefined> => {
-  const unansweredQuestions = await prisma.question.findMany({
-    where: {
-      Answer: {
-        none: {
-          userId: userId
-        }
-      }
-    }
-  })
 
-  console.log('unanswered', unansweredQuestions)
+  const questions = await prisma.question.findMany();
 
-  if (unansweredQuestions && unansweredQuestions.length > 0) {
-    return unansweredQuestions[0]
-  }
+  const answeredQuestions = await prisma.answer.findMany({where: {userId: userId}});
 
-  return undefined;
+  const answeredQuestionIds = answeredQuestions.map(answer => answer.questionId);
+
+  const unansweredQuestion = questions
+    .find(question => !answeredQuestionIds.includes(question.id));
+
+
+  console.log('unanswered', questions, answeredQuestions, unansweredQuestion)
+
+  return unansweredQuestion;
 }
 
