@@ -74,10 +74,9 @@ app.event('member_joined_channel', async ({ event, client }) => {
 });
 
 app.action('submit_question', async ({ ack, say, body, client }) => {
+  await ack();
   // eslint-disable-next-line
   // @ts-ignore
-
-  await ack();
   const questionIds = Object.keys(body.state.values.question_block);
   const userInfo = await client.users.info({ user: body.user.id });
   const email = userInfo.user.profile.email;
