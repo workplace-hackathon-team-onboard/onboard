@@ -170,7 +170,7 @@ export async function sendQA(qaArgs: QAArgs) {
     channel: channelId,
     blocks: [
       ...qaArgs.questions.map((question) =>
-        blocks.question(question.question, 1),
+        blocks.question(question.question, question.questionId),
       ),
       blocks.submitQuestionButton(),
     ],
