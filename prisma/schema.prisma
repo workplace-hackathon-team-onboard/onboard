@@ -16,6 +16,7 @@ model User {
   name      String
   createdAt DateTime
   updatedAt DateTime
+  onboarded Boolean @default(false)
   Answer    Answer[]
 }
 

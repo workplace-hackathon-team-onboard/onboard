@@ -24,7 +24,7 @@
     "typescript": "~5.0"
   },
   "scripts": {
-    "migrate": "prisma migrate dev && prisma migrate db seed",
+    "migrate": "prisma migrate dev && prisma db seed",
     "start": "npm run migrate && ts-node src/main.ts",
     "clean": "rimraf coverage build tmp",
     "prebuild": "npm run lint",
