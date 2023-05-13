@@ -30,7 +30,7 @@ const insertUsers = async () => {
   const users = [
     {
       name: 'Connor',
-      email: 'connormonaghan1914@gmail.com',
+      email: 'connor_monaghan@hotmail.com',
       slackId: 'U0576N70Z8F',
       createdAt: new Date(),
       updatedAt: new Date(),
