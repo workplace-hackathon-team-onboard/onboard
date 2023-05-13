@@ -46,3 +46,10 @@ export async function compare(
 
   return comparison;
 }
+
+/**
+ * todo
+ *   At a set time each day, pull the answers from the database.
+ *   Generate a comparison via chatGPT between a new team member and everyone in the team.
+ *   Persist the comparison in the db.
+ */
