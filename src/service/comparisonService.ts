@@ -89,15 +89,15 @@ export const generateComparison = async () => {
         answer.answer,
       );
 
-      await prisma.comparison.upsert({
-        where: {},
-        create: {
+      console.log({ YEET: comparison });
+
+      await prisma.comparison.create({
+        data: {
           userId: answer.userId,
           report: comparison,
           questionId: answer.questionId,
           createdAt: new Date(),
         },
-        update: undefined,
       });
     }
   }
