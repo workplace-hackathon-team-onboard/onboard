@@ -14,6 +14,7 @@ model User {
   id        Int      @id @default(autoincrement())
   email     String   @unique
   name      String
+  slackId   String   @unique
   createdAt DateTime
   updatedAt DateTime
   onboarded Boolean  @default(false)
@@ -39,12 +40,12 @@ model Answer {
 }
 
 model Comparison {
-  id         Int      @id @default(autoincrement())
-  question   Question @relation(fields: [questionId], references: [id])
-  questionId Int
+  id             Int      @id @default(autoincrement())
+  question       Question @relation(fields: [questionId], references: [id])
+  questionId     Int
   newStarterName String
   teamMemberName String
-  createdAt  DateTime
-  report     String
-  userId     Int?
+  createdAt      DateTime
+  report         String
+  userId         Int?
 }
