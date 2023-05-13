@@ -2,7 +2,6 @@ import { App } from "@slack/bolt";
 import { blocks } from "./blockBuilders";
 import {prisma} from "../helpers/prismaClient";
 
-
 interface Question {
   questionId: string
   question: string
@@ -14,15 +13,16 @@ interface QAArgs {
 }
 
 const app = new App({
-  token:'xoxb-5225133679798-5252434835301-zwRuaLmx8YS14ahJdQDQAs3D',
+  token:'xoxb-5225133679798-5252434835301-wjMZAiEW7Q6cEjKNKwm4wYE6',
   clientId: '5225133679798.5255377016402',
   clientSecret: '6d002315132274f9cb3875e55f8b6018',
   signingSecret: '8d965db0ab92534c5168712b6f081427',
-  appToken: 'xapp-1-A057HB30GBU-5259069846578-3848bc0b96b56e733d05fdaeabb235f36665d2aa2d101e4810c09e8b45a7ebee',
+  appToken: 'xapp-1-A057HB30GBU-5252497486342-6bf311f91fd1560bc6367dfef7137361e06f4576fe85585c01c7c8f21a350dbb',
   socketMode: true,
 });
 
 app.event('member_joined_channel', async ({event, client}) => {
+  console.log('member joined channel', event);
   const userInfo = await client.users.info({user: event.user})
   if (userInfo.user) {
     const email = userInfo.user.profile.email;
@@ -40,7 +40,7 @@ app.event('member_joined_channel', async ({event, client}) => {
         email: email
       }
     })
-    console.log('new user onboarded', event, user)
+    console.log('new user onboarded', user)
   } else {
     console.error('no user info found for user: ', event)
   }
@@ -49,10 +49,15 @@ app.event('member_joined_channel', async ({event, client}) => {
 app.action('submit_question', async ({ack, say, body}) => {
   // eslint-disable-next-line
   // @ts-ignore
-  const answer = body.state.values.question_block['plain_text_input-action'].value;
+  const questionIds = Object.keys(body.state.values.question_block)
 
-  console.log(' The answer is: ', answer)
-  await say('sup bro')
+  for(const questionId of questionIds) {
+    // eslint-disable-next-line
+    // @ts-ignore
+    const answer = body.state.values.question_block[questionId].value
+    console.log('the answer is', answer)
+  }
+
   await ack()
 })
 
@@ -66,7 +71,7 @@ export async function sendQA(qaArgs: QAArgs) {
     channel: channelId,
     blocks: [
       ...qaArgs.questions.map(
-        (question) => blocks.question(question.question)
+        (question) => blocks.question(question.question, 'question-1')
       ),
       blocks.submitQuestionButton()
     ]
@@ -88,10 +93,11 @@ export async function startSlackBot (): Promise<void> {
 
   console.log('⚡️ Bolt app is running!');
 
-  sendComparisonResponse('U057GHZBWFM', 'stuff')
+  // sendComparisonResponse('U057GHZBWFM', 'stuff')
+  sendQA({slackUserId: 'U057HM2935J', questions: [{questionId: 'question-1', question: 'What is your name?'}]})
 
   // const res = await app.client.users.list()
-  // console.log(res.members.map((user) => ( { id: user.id, name: user.name } )))
+  // console.log(res.members.map((user) => ( { id: user.id, name: user.name, email: user.} )))
 }
 
 
