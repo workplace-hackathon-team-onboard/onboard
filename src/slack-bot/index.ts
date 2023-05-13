@@ -1,19 +1,30 @@
 import { App } from "@slack/bolt";
 import { blocks } from "./blockBuilders";
 
+
+interface Question {
+  questionId: string
+  question: string
+}
+
+interface QAArgs {
+  slackUserId: string
+  questions: Question[]
+}
+
 const app = new App({
-  token:'xoxb-5225133679798-5252434835301-rCv6WSOexHG3oq8byIn6wxJY',
+  token:'xoxb-5225133679798-5252434835301-zwRuaLmx8YS14ahJdQDQAs3D',
   clientId: '5225133679798.5255377016402',
   clientSecret: '6d002315132274f9cb3875e55f8b6018',
   signingSecret: '8d965db0ab92534c5168712b6f081427',
-  appToken: 'xapp-1-A057HB30GBU-5282695082864-c44689831bcc4217f0c9421dfeef70af6a5c6d339e1f6725ed9421f0ee29f2fc',
+  appToken: 'xapp-1-A057HB30GBU-5259069846578-3848bc0b96b56e733d05fdaeabb235f36665d2aa2d101e4810c09e8b45a7ebee',
   socketMode: true,
 });
 
-
-app.message('cm', async ({say}) => {
-  console.log('some stuff and things')
-  await say('sup CM')
+app.event('member_joined_channel', async ({event, client}) => {
+  // TODO reece save to db - this person is a new starter
+  const userId = event.user
+  console.log('new user joined: ', userId)
 })
 
 app.action('submit_question', async ({ack, say, body}) => {
@@ -26,47 +37,31 @@ app.action('submit_question', async ({ack, say, body}) => {
   await ack()
 })
 
-// Listen to when "A new member has joined"
-app.event('team_join', async ({event, client}) => {
- // TODO collect known user's slack ids & names -> store in db
- console.log('A new team member has joined!')
- console.log(event)
-})
 
-
-
-interface Question {
-  questionId: string
-  question: string
-}
-
-interface QAArgs {
-  slackUserId: string
-  questions: Question[]
-}
-
-// send qanda messages to known users
-export async function sendQA() {
+export async function sendQA(qaArgs: QAArgs) {
   // Open a converstaion with the user - this is idempotent
-  const response = await app.client.conversations.open({users: 'U057GHZBWFM'})
+  const response = await app.client.conversations.open({users: qaArgs.slackUserId})
 
   const channelId = response.channel.id;
   await app.client.chat.postMessage({
     channel: channelId,
     blocks: [
-      blocks.question('What is your name?'),
+      ...qaArgs.questions.map(
+        (question) => blocks.question(question.question)
+      ),
       blocks.submitQuestionButton()
     ]
   })
-
-
 }
 
-// TODO will this be returned from the 'postMessage' above? or an event
-// store responses to qanda messages in db
-
-
-// send messages to sets of users based on matches generated from quand responses
+export async function sendComparisonResponse(slackUserId: string, comparisonResults: string) {
+  const response = await app.client.conversations.open({users: slackUserId})
+  const channelId = response.channel.id;
+  await app.client.chat.postMessage({
+    channel: channelId,
+    text: 'Welcome to the team bro'
+  })
+}
 
 export async function startSlackBot (): Promise<void> {
   // Start the app
@@ -74,7 +69,7 @@ export async function startSlackBot (): Promise<void> {
 
   console.log('⚡️ Bolt app is running!');
 
-  sendQA()
+  sendComparisonResponse('U057GHZBWFM', 'stuff')
 
   // const res = await app.client.users.list()
   // console.log(res.members.map((user) => ( { id: user.id, name: user.name } )))
