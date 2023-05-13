@@ -1,5 +1,5 @@
 import {prisma} from "../helpers/prismaClient";
-import {sendQA} from "../slack-bot";
+import {getSlackUserByEmail, sendQA} from "../slack-bot";
 
 const askedQuestions: Record<string, number> = {}
 
@@ -22,14 +22,22 @@ export const askQuestions = async () => {
     })
 
     const unansweredQuestion = unansweredQuestions[0];
-    //
-    // sendQA({
-    //   slackUserId: user.slackUserId,
-    //   questions: [{
-    //     questionId: unansweredQuestion.id,
-    //     question: unansweredQuestion.question
-    //   }]
-    // })
+
+    const slackUser = await getSlackUserByEmail(user.email);
+
+    if (!slackUser) {
+      await sendQA({
+        slackUserId: slackUser.id,
+        questions: [{
+          questionId: unansweredQuestion.id,
+          question: unansweredQuestion.question
+        }]
+      })
+
+    } else {
+      console.error('could not find slack user for email', user)
+    }
+
   }
 
 }
