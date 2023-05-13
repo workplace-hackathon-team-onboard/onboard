@@ -32,7 +32,7 @@ export const askQuestions = async () => {
     const slackUser = await getSlackUserByEmail(user.email);
 
     if (slackUser) {
-      if (unansweredQuestion.id === askedQuestions[user.id]) {
+      if (unansweredQuestion.id !== askedQuestions[user.id]) {
         await sendQA({
           slackUserId: slackUser.id,
           questions: [{
