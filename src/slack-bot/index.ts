@@ -14,13 +14,13 @@ interface QAArgs {
 
 
 const app = new App({
-  token:'xoxb-5271930160977-5282993503024-RtzUP5lm52P2CagI5WlDW3so',
-  clientId: '5271930160977.5259165806595',
-  clientSecret: 'bd6739bf6beebd502f69e02e191ad863',
-  signingSecret: '9afa26582af6a3b8e165775573a1c783',
-  // botId: 'B057ANMKK54',
-  appToken: 'xapp-1-A057M4VPQHH-5271947023425-a9814797d836718488a067a7608f0cf035296ae14a84eec3fb0094bdedead5a9',
+  token: process.env.SLACK_TOKEN,
+  clientId: process.env.SLACK_CLIENT_ID,
+  clientSecret: process.env.SLACK_CLIENT_SECRET,
+  signingSecret: process.env.SLACK_SIGNING_SECRET,
+  appToken: process.env.SLACK_APP_TOKEN,
   socketMode: true,
+  // botId: 'B057ANMKK54',
   // stateSecret: 'my-secret',
   // scopes: ['calls:write', 'channels:history', 'channels:read', 'chat:write', 'im:write', 'users:read', 'users:read.email'],
   // redirectUri: 'https://91dc-49-255-91-18.ngrok-free.app/slack/oauth_redirect',
