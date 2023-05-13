@@ -21,10 +21,53 @@ const insertQuestions = async () => {
         createdAt: new Date(),
       },
       update: {},
-      where: {}
+      where: {
+        question,
+      }
     });
   }
 }
 
+const insertUsers = async () => {
+  const users = [
+    {
+      name: "Connor",
+      email: "john@gmail.com",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
+      name: "Brian",
+      email: "brian@gmail.com",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
+      name: "Noah",
+      email: "noah@gmail.com",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
+      name: "Reece",
+      email: "reece@gmail.com",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }
+  ]
 
-insertQuestions()
+  for (let user of users) {
+    const res = await prisma.user.upsert({
+      create: user,
+      update: {},
+      where: {
+        email: user.email
+      },
+    });
+  }
+
+}
+
+insertUsers()
+  .then(insertQuestions);
+
