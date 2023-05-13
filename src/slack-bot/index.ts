@@ -2,7 +2,6 @@ import { App } from "@slack/bolt";
 import { blocks } from "./blockBuilders";
 import {prisma} from "../helpers/prismaClient";
 
-
 interface Question {
   questionId: string
   question: string
@@ -23,6 +22,7 @@ const app = new App({
 });
 
 app.event('member_joined_channel', async ({event, client}) => {
+  console.log('member joined channel', event);
   const userInfo = await client.users.info({user: event.user})
   if (userInfo.user) {
     const email = userInfo.user.profile.email;
@@ -40,7 +40,7 @@ app.event('member_joined_channel', async ({event, client}) => {
         email: email
       }
     })
-    console.log('new user onboarded', event, user)
+    console.log('new user onboarded', user)
   } else {
     console.error('no user info found for user: ', event)
   }
