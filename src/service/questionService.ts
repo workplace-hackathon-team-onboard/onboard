@@ -1,7 +1,12 @@
 import {prisma} from "../helpers/prismaClient";
 import {getSlackUserByEmail, sendQA} from "../slack-bot";
 
-const askedQuestions: Record<string, number> = {}
+type QuestionId = number;
+type UserId = number;
+/**
+ * Keep track of the last question asked to a user
+ */
+const askedQuestions: Record<UserId, QuestionId> = {}
 
 export const askQuestions = async () => {
   const nonOnboardedUsers = await prisma.user.findMany({
@@ -25,14 +30,20 @@ export const askQuestions = async () => {
 
     const slackUser = await getSlackUserByEmail(user.email);
 
-    if (!slackUser) {
-      await sendQA({
-        slackUserId: slackUser.id,
-        questions: [{
-          questionId: unansweredQuestion.id,
-          question: unansweredQuestion.question
-        }]
-      })
+    if (slackUser) {
+      if (unansweredQuestion.id === askedQuestions[user.id]) {
+        await sendQA({
+          slackUserId: slackUser.id,
+          questions: [{
+            questionId: unansweredQuestion.id,
+            question: unansweredQuestion.question
+          }]
+        })
+        askedQuestions[user.id] = unansweredQuestion.id
+      } else {
+        console.log('already asked this question to this user', user)
+      }
+
 
     } else {
       console.error('could not find slack user for email', user)
