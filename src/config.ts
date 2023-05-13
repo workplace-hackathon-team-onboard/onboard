@@ -1,6 +1,4 @@
 
-
-
 export enum Crons {
    EVERY_MINUTE = '* * * * * *',
 }

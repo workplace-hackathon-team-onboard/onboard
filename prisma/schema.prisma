@@ -16,7 +16,7 @@ model User {
   name      String
   createdAt DateTime
   updatedAt DateTime
-  onboarded Boolean @default(false)
+  onboarded Boolean  @default(false)
   Answer    Answer[]
 }
 
@@ -26,14 +26,12 @@ model Question {
   Answer     Answer[]
   createdAt  DateTime
   Comparison Comparison[]
-  userId     Int?
 }
 
 model Answer {
   id         Int      @id @default(autoincrement())
   question   Question @relation(fields: [questionId], references: [id])
   answer     String
-  user       String
   questionId Int
   createdAt  DateTime
   User       User?    @relation(fields: [userId], references: [id])
