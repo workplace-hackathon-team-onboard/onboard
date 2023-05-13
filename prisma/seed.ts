@@ -31,7 +31,7 @@ const insertUsers = async () => {
     {
       name: 'Connor',
       email: 'connormonaghan1914@gmail.com',
-      slackId: 'temp1',
+      slackId: 'U0576N70Z8F',
       createdAt: new Date(),
       updatedAt: new Date(),
       onboarded: true,
@@ -39,7 +39,7 @@ const insertUsers = async () => {
     {
       name: 'Brian',
       email: 'b.riwukaho@gmail.com',
-      slackId: 'temp2',
+      slackId: 'U057ZTF981F',
       createdAt: new Date(),
       updatedAt: new Date(),
       onboarded: false,
@@ -47,7 +47,7 @@ const insertUsers = async () => {
     {
       name: 'Noah',
       email: 'noah.davey@gmail.com',
-      slackId: 'temp3',
+      slackId: 'U0576N72UKZ',
       createdAt: new Date(),
       updatedAt: new Date(),
       onboarded: true,
@@ -55,7 +55,7 @@ const insertUsers = async () => {
     {
       name: 'Reece',
       email: 'fenwickreece08@gmail.com',
-      slackId: 'temp4',
+      slackId: 'U057M4QUE75',
       createdAt: new Date(),
       updatedAt: new Date(),
       onboarded: true,

@@ -117,7 +117,18 @@ app.action('submit_question', async ({ ack, say, body, client }) => {
       },
     });
 
-    await generateComparison(prismaAnswer, prismaUser);
+    const comparisons = await generateComparison(prismaAnswer, prismaUser);
+    const response = await app.client.conversations.open({
+      users: prismaUser.slackId,
+    });
+
+    const channelId = response.channel.id;
+    await app.client.chat.postMessage({
+      channel: channelId,
+      blocks: [
+        ...blocks.comparisonInsights(comparisons),
+      ],
+    });
 
     console.log('the answer is', answer);
 
