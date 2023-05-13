@@ -89,9 +89,17 @@ app.action('submit_question', async ({ ack, say, body, client }) => {
     const prismaAnswer = await prisma.answer.create({
       data: {
         answer: answer,
-        questionId: Number(questionId),
+        question: {
+          connect: {
+            id: Number(questionId),
+          }
+        },
         createdAt: new Date(),
-        userId: prismaUser.id,
+        User: {
+          connect: {
+            id: prismaUser.id,
+          }
+        }
       },
     });
 
