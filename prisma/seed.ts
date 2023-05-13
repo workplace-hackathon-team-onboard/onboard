@@ -2,14 +2,13 @@ import {prisma} from '../src/helpers/prismaClient'
 
 // create an array of icebreaker questions
 const questions = [
-  { question: "What is your favorite food?" },
-  { question: "What is your favorite animal?" },
-  { question: "What is your favorite movie?" },
-  { question: "What is your favorite song?" },
-  { question: "What is your favorite TV show?" },
-  { question: "What is your favorite sport?" },
-  ]
-
+  {question: "What is your favorite food?"},
+  {question: "What is your favorite animal?"},
+  {question: "What is your favorite movie?"},
+  {question: "What is your favorite song?"},
+  {question: "What is your favorite TV show?"},
+  {question: "What is your favorite sport?"},
+]
 
 
 // create a function to insert questions into the database
@@ -35,24 +34,28 @@ const insertUsers = async () => {
       email: "john@gmail.com",
       createdAt: new Date(),
       updatedAt: new Date(),
+      onboarded: true,
     },
     {
       name: "Brian",
       email: "brian@gmail.com",
       createdAt: new Date(),
       updatedAt: new Date(),
+      onboarded: false,
     },
     {
       name: "Noah",
       email: "noah@gmail.com",
       createdAt: new Date(),
       updatedAt: new Date(),
+      onboarded: true,
     },
     {
       name: "Reece",
       email: "reece@gmail.com",
       createdAt: new Date(),
       updatedAt: new Date(),
+      onboarded: true,
     }
   ]
 
